@@ -6,5 +6,5 @@ using namespace std;
 
 void main()
 {
-	printf("mysql : %s\n", mysql_get_client_info());
+	//printf("mysql : %s\n", mysql_get_client_info());
 }

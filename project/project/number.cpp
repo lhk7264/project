@@ -1,5 +1,5 @@
 #include "number.h"
-
+#include <fstream>
 
 int number()
 {
@@ -266,6 +266,15 @@ int number()
 		api.SetImage((uchar*)mTempNum.data, mTempNum.size().width, mTempNum.size().height, mTempNum.channels(), mTempNum.step1());
 		char* outText = api.GetUTF8Text();
 		cout << "car num = " << outText << endl;
+		ofstream fout("carnumber.txt");
+		if (!fout)
+		{
+			cout << "carnumber.txt 파일 열기 실패";
+			return 0;
+		}
+		fout << outText << endl;
+
+		fout.close();
 
 	}
 
