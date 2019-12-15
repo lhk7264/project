@@ -24,9 +24,6 @@
     <ClCompile Include="number.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sql.cpp">
-      <Filter>소스 파일\database</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="number.h">
