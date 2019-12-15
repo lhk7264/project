@@ -281,10 +281,12 @@ int number()
 
 		mTempNum = ori_image(Range(Group_merge[i].y, Group_merge[i].br().y), Range(Group_merge[i].x, Group_merge[i].br().x));
 		imshow(temp, mTempNum);
+		imwrite("불법차량.jpg", mTempNum);
 		api.SetImage((uchar*)mTempNum.data, mTempNum.size().width, mTempNum.size().height, mTempNum.channels(), mTempNum.step1());
 		char* outText = api.GetUTF8Text();
 		cout << "car num = " << outText << endl;
-		/*
+		
+
 		ofstream fout("carnumber.txt");
 		if (!fout)
 		{
@@ -295,8 +297,8 @@ int number()
 
 		fout.close();
 
-	}
-	*/
+	
+	
 
 		mysql_init(&conn);
 
@@ -333,6 +335,7 @@ int number()
 
 
 		imshow("8.Merge_2", Group_final);
+	
 
 		waitKey(0);
 
