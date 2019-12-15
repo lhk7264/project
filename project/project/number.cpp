@@ -1,8 +1,26 @@
 #include "number.h"
 #include <fstream>
+#include <mysql.h>
+#include <string.h>
+#include <stdio.h>
+#pragma comment(lib,"libmySQL.lib")
+#define DB_HOST "127.0.0.1"
+#define DB_USER "root"
+#define DB_PASS "s10633"
+#define DB_NAME "carnumber"
+#define CHOP(x) x[strlen(x) - 1] = ' '
+
 
 int number()
 {
+	MYSQL* connection = NULL, conn;
+	MYSQL_RES* sql_result;
+	MYSQL_ROW   sql_row;
+	int       query_stat;
+
+	char CARID[11];
+	char query[255];
+
 	Mat ori_image, Gray_img, Canny_img;
 	ori_image = imread("carnumber_ori.jpg");
 	imshow("1.Original image", ori_image);
@@ -266,6 +284,7 @@ int number()
 		api.SetImage((uchar*)mTempNum.data, mTempNum.size().width, mTempNum.size().height, mTempNum.channels(), mTempNum.step1());
 		char* outText = api.GetUTF8Text();
 		cout << "car num = " << outText << endl;
+		/*
 		ofstream fout("carnumber.txt");
 		if (!fout)
 		{
@@ -277,15 +296,48 @@ int number()
 		fout.close();
 
 	}
+	*/
+
+		mysql_init(&conn);
+
+		connection = mysql_real_connect(&conn, DB_HOST,
+			DB_USER, DB_PASS,
+			DB_NAME, 3306,
+			(char*)NULL, 0);
+
+		if (connection == NULL)
+		{
+			fprintf(stderr, "Mysql connection error : %s", mysql_error(&conn));
+			return 1;
+		}
+
+		query_stat = mysql_query(connection, "SELECT * FROM carnum");
+
+		if (query_stat != 0)
+		{
+			fprintf(stderr, "Mysql query error : %s", mysql_error(&conn));
+			return 1;
+		}
+
+		sql_result = mysql_store_result(connection);
+
+		sprintf_s(query, "insert into carnum values " "('%s')",outText);
+
+		query_stat = mysql_query(connection, query);
+		if (query_stat != 0)
+		{
+			fprintf(stderr, "¿¡·¯ : %s", mysql_error(&conn));
+			return 1;
+		}
+		mysql_close(connection);
 
 
-	imshow("8.Merge_2", Group_final);
+		imshow("8.Merge_2", Group_final);
 
-	waitKey(0);
+		waitKey(0);
 
-
-	return 0;
-
+		return 0;
+	}
 }
 
 
